@@ -13,7 +13,7 @@ try {
   core.setOutput("issue_id", found[0]);
 
   if(found){
-    const linearClient = new LinearClient({
+    const linearClient = new linear.LinearClient({
       apiKey: apiKey
     })
 
