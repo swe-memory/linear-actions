@@ -5,6 +5,10 @@ inputs:
     description: 'Branch name'
     required: true
     default: 'SWE'
+  linear_api_key:
+    description: 'Linear api key'
+    required: false
+    default: ''
 outputs:
   issue_id:
     description: 'Issue ID from the branch name'
