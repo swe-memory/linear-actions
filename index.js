@@ -17,7 +17,7 @@ try {
       apiKey: apiKey
     })
 
-    const issues = await linearClient.issues();
+    const issues = callClient(linearClient);
     console.log(issues);
   }
   
@@ -26,4 +26,9 @@ try {
   // console.log(`The event payload: ${payload}`);
 } catch (error) {
   core.setFailed(error.message);
+}
+
+const callClient = async (linearClient) => {
+  const issues = await linearClient.issues();
+  return issues;
 }
