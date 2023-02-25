@@ -2,6 +2,11 @@ const linear = require('@linear/sdk')
 const core = require('@actions/core');
 const github = require('@actions/github');
 
+const callClient = async (linearClient) => {
+  const issues = await linearClient.issues();
+  return issues;
+}
+
 try {
   const branchName = core.getInput('branch_name');
   const apiKey = core.getInput('linear_api_key');
@@ -26,9 +31,4 @@ try {
   // console.log(`The event payload: ${payload}`);
 } catch (error) {
   core.setFailed(error.message);
-}
-
-const callClient = async (linearClient) => {
-  const issues = await linearClient.issues();
-  return issues;
 }
