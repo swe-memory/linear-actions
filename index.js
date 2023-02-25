@@ -11,7 +11,7 @@ const main = async () => {
     const regex = /[Ss][Ww][Ee]-[1-9][0-9]*/;
     const found = branchName.match(regex);
     console.log(found);
-    core.setOutput("issue_id", found[0]);
+    core.setOutput("issue_id", found[0].toUpperCase());
 
     if(found){
       const linearClient = new linear.LinearClient({
@@ -20,7 +20,7 @@ const main = async () => {
 
       const issues = await linearClient.issues();
 
-      if(issues){
+      /* if(issues){
         for(let i = 0; i < issues.nodes.length; i++){
           const issue = issues.nodes[i];
           console.log('ID: ', issue.id);
@@ -28,7 +28,10 @@ const main = async () => {
           console.log('Title: ', issue.title);
           console.log('Description', issue.description);
         }
-      }
+      } */
+
+      const targetIssue = await linearClient.issue(found[0].toUpperCase());
+      console.log(targetIssue);
     }
     
     // Get the JSON webhook payload for the event that triggered the workflow
