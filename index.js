@@ -20,11 +20,15 @@ const main = async () => {
 
       const issues = await linearClient.issues();
 
-      if(issues)
-        console.log(issues);
-
-      if(issues.nodes[0])
-        console.log(issues.nodes[0]);
+      if(issues){
+        for(let i = 0; i < issues.nodes.length; i++){
+          const issue = issues.nodes[i];
+          console.log('ID: ', issue.id);
+          console.log('Issue ID: ', issue.identifier);
+          console.log('Title: ', issue.title);
+          console.log('Description', issue.description);
+        }
+      }
     }
     
     // Get the JSON webhook payload for the event that triggered the workflow
