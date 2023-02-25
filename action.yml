@@ -1,0 +1,13 @@
+name: 'Linear issue'
+description: 'Get branch name and extract issue ID'
+inputs:
+  branch_name:
+    description: 'Branch name'
+    required: true
+    default: 'SWE'
+outputs:
+  issue_id:
+    description: 'Issue ID from the branch name'
+runs:
+  using: 'node16'
+  main: 'index.js'
