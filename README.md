@@ -21,12 +21,10 @@ jobs:
         
       - name: Extract
         id: extract
-        uses: swe-memory/linear-actions@v1.5
+        uses: swe-memory/linear-actions@v1.6
         with:
+          token: ${{ github.token }}
           branch_name: ${{ github.head_ref }}
           linear_auth_type: 'apiKey'
           linear_auth_key: ${{ secrets.LINEAR_APIKEY }}
-
-      - name: Output
-        run: echo "${{ steps.extract.outputs.issue_id }}"
 ```

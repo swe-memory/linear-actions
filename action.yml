@@ -1,6 +1,10 @@
 name: 'Linear issue'
 description: 'Extract issue ID from the branch name and query Linear issue'
 inputs:
+  token:
+    description: 'GitHub token'
+    required: true
+    default: ''
   branch_name:
     description: 'Branch name'
     required: true
