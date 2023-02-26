@@ -1,7 +1,7 @@
 # Linear Actions
 
 ```yaml
-name: "Linear Issue ID Extraction"
+name: "Linear Issue ID Extraction and Query"
 
 on:
   pull_request_target:
@@ -13,7 +13,7 @@ on:
       - unlabeled
 
 jobs:
-  linear-issue-extaction:
+  Linear Issue ID Validation:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -21,9 +21,11 @@ jobs:
         
       - name: Extract
         id: extract
-        uses: swe-memory/linear-actions@v1.0
+        uses: swe-memory/linear-actions@v1.5
         with:
           branch_name: ${{ github.head_ref }}
+          linear_auth_type: 'apiKey'
+          linear_auth_key: ${{ secrets.LINEAR_APIKEY }}
 
       - name: Output
         run: echo "${{ steps.extract.outputs.issue_id }}"
