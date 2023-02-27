@@ -5,10 +5,6 @@ inputs:
     description: 'GitHub token'
     required: true
     default: ''
-  branch_name:
-    description: 'Branch name'
-    required: true
-    default: 'SWE'
   linear_auth_type:
     description: 'Linear authentication type'
     required: false

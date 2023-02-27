@@ -19,12 +19,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         
-      - name: Extract
+      - name: Extract & Query
         id: extract
-        uses: swe-memory/linear-actions@v1.7
+        uses: swe-memory/linear-actions@v1.8
         with:
           token: ${{ github.token }}
-          branch_name: ${{ github.head_ref }}
           linear_auth_type: 'apiKey'
           linear_auth_key: ${{ secrets.LINEAR_APIKEY }}
 ```

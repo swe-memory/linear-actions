@@ -2,24 +2,29 @@ const linear = require('@linear/sdk');
 const core = require('@actions/core');
 const github = require('@actions/github');
 
-const extract = (branchName) => {
+// Extract issue ID from branch name
+const getIssueID = (payload) => {
   const regex = /[Ss][Ww][Ee]-[1-9][0-9]*/;
-  return(branchName.match(regex));
+  const branchName = payload.head.ref;
+  const found = branchName.match(regex);
+  if(found)
+    return found[0].toUpperCase();
+  return null;
 }
 
 // Get the client based on authentication type
-const getClient = (auth_type, auth_key) => {
-  if(auth_type === 'apiKey'){
+const getClient = (authType, authKey) => {
+  if(authType === 'apiKey'){
     // Get the api key
     const linearClient = new linear.LinearClient({
-      apiKey: auth_key
+      apiKey: authKey
     })
     return linearClient;
   }
-  else if(auth_type === 'accessToken'){
+  else if(authType === 'accessToken'){
     // Get the access token
     const linearClient = new linear.LinearClient({
-      accessToken: auth_key
+      accessToken: authKey
     })
     return linearClient;
   }
@@ -35,12 +40,8 @@ const getIssue = async (linearClient, issueID) => {
   return targetIssue;
 }
 
-const autoComment = async (token, issueID, targetIssue) => {
-  if(token){
-    const octokit = github.getOctokit(token);
-    const { context } = github;
+const autoComment = async (context, octokit, issueID, targetIssue) => {
     const { pull_request } = context.payload;
-    console.log(pull_request);
     const { data } = await octokit.rest.issues.createComment({
       ...context.repo,
       issue_number: pull_request.number,
@@ -48,25 +49,30 @@ const autoComment = async (token, issueID, targetIssue) => {
       [${issueID}] ${targetIssue.title}`
     })
     return data;
-  }
 }
 
 const main = async () => {
   try {
-    // Extract issue ID from branch name
-    const branchName = core.getInput('branch_name');
-    console.log(`Current branch: ${branchName}`);
-    const found = extract(branchName);
 
-    if(found){
-      const issueID = found[0].toUpperCase();
+    const token = core.getInput('token');
 
-      const linearClient = getClient(core.getInput('linear_auth_type'), core.getInput('linear_auth_key'));
+    if(token){
+      const octokit = github.getOctokit(token);
+      const { context } = github;
+      const { pull_request } = context.payload;
+      console.log(pull_request);
 
-      let targetIssue = { title: 'Not Found' };
-      targetIssue = await getIssue(linearClient, issueID);
+      // Issue ID in uppercase
+      const issueID = getIssueID(pull_request);
 
-      const data = await autoComment(core.getInput('token'), issueID, targetIssue);
+      if(issueID){
+        const linearClient = getClient(core.getInput('linear_auth_type'), core.getInput('linear_auth_key'));
+
+        let targetIssue = { title: 'Not Found' };
+        targetIssue = await getIssue(linearClient, issueID);
+  
+        const data = await autoComment(context, octokit, issueID, targetIssue);
+      }
     }
 
   } catch (error) {
