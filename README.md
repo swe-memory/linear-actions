@@ -13,7 +13,7 @@ on:
       - unlabeled
 
 jobs:
-  Linear Issue ID Validation:
+  Linears-issue-ID-validation:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -21,7 +21,7 @@ jobs:
         
       - name: Extract
         id: extract
-        uses: swe-memory/linear-actions@v1.6
+        uses: swe-memory/linear-actions@v1.7
         with:
           token: ${{ github.token }}
           branch_name: ${{ github.head_ref }}
