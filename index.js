@@ -40,6 +40,7 @@ const autoComment = async (token, issueID, targetIssue) => {
     const octokit = github.getOctokit(token);
     const { context } = github;
     const { pull_request } = context.payload;
+    console.log(pull_request);
     const { data } = await octokit.rest.issues.createComment({
       ...context.repo,
       issue_number: pull_request.number,
