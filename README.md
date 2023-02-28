@@ -31,3 +31,14 @@ jobs:
           label_description: "PR title needs formatting"
           label_color: "D4C5F9"
 ```
+
+## Inputs
+| Attributes          |    Description                               |  Default Value                 | Example Values                       |
+|:-------------------:|:--------------------------------------------:|-------------------------------:|-------------------------------------:|
+| token               | GitHub authentication token                  | "" (Empty string)              | secrets.GITHUB_TOKEN, github.token   |
+| linear_id_prefix    | Linear issue ID prefix                       | ""                             | "SWE", "SCSE", "test"                |
+| linear_auth_type    | Linear authentication type                   | ""                             | "apiKey" or "accessToken" only       |
+| linear_auth_key     | Linear authentication key                    | ""                             | Can be found in Linear app           |
+| label_name          | Label for non-aligned PR title               | "bad PR title"                 | "recheck PR title"                   |
+| label_description   | Label description for non-aligned PR title   | "PR title needs formatting"    | "PR title needs adjustment"          |
+| label_color         | Label color for non-aligned PR title         | "D4C5F9"                       | "0052CC"                             |
