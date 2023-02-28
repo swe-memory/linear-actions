@@ -51,12 +51,35 @@ const checkTitle = (payload, targetIssue) => {
   return false;
 }
 
-const addLabels = async (context, octokit) => {
+// Check whether label exists
+const checkLabel = async (context, octokit, labelName) => {
+  try{
+    await octokit.rest.issues.getLabel({
+      ...context.repo,
+      name: labelName
+    })
+    return true;
+  }
+  catch (error) {
+    return false;
+  }
+}
+
+const createLabel = async (context, octokit, labelName, labelDesc, labelColor) => {
+  await octokit.rest.issues.createLabel({
+    ...context.repo,
+    name: labelName,
+    description: labelDesc,
+    color: labelColor
+  })
+}
+
+const addLabels = async (context, octokit, labelName) => {
   const { pull_request } = context.payload;
   await octokit.rest.issues.addLabels({
     ...context.repo,
     issue_number: pull_request.number,
-    labels: ['bad PR title']
+    labels: [labelName]
   })
 }
 
@@ -66,8 +89,10 @@ const autoComment = async (context, octokit, issueID, targetIssue) => {
     await octokit.rest.issues.createComment({
       ...context.repo,
       issue_number: pull_request.number,
-      body: `@${pull_request.user.login} Please follow this format for PR title:\n
-      [${issueID}] ${targetIssue.title}`
+      body: `@${pull_request.user.login} Please follow this format for PR title:
+\`\`\`
+[${issueID}] ${targetIssue.title}
+\`\`\``
     })
 }
 
@@ -102,12 +127,17 @@ const main = async () => {
         targetIssue = await getIssue(linearClient, issueID);
 
         if(!checkTitle(pull_request, targetIssue)){
-          await addLabels(context, octokit);
+          
+          const labelName = core.getInput('label_name');
+          if(!await checkLabel(context, octokit, labelName)){
+            await createLabel(context, octokit, labelName, core.getInput('label_description'), core.getInput('label_color'));
+          }
+          
+          await addLabels(context, octokit, labelName);
           await autoComment(context, octokit, issueID, targetIssue);
         }
         else
           await removeLabel(context, octokit);
-
       }
     }
 
