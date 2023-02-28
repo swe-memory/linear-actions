@@ -21,9 +21,10 @@ jobs:
         
       - name: Title validation
         id: validate
-        uses: swe-memory/linear-actions@v2.0
+        uses: swe-memory/linear-actions@v2.1
         with:
           token: ${{ github.token }}
+          linear_id_prefix: "swe"
           linear_auth_type: "apiKey"
           linear_auth_key: ${{ secrets.LINEAR_APIKEY }}
           label_name: "bad PR title"

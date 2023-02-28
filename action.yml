@@ -5,6 +5,10 @@ inputs:
     description: 'GitHub token'
     required: true
     default: ''
+  linear_id_prefix:
+    description: 'Linear issue ID prefix'
+    required: false
+    default: ''
   linear_auth_type:
     description: 'Linear authentication type'
     required: false

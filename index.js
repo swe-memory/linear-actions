@@ -3,9 +3,14 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 
 // Extract issue ID from branch name
-const getIssueID = (payload) => {
+const getIssueID = (payload, idPrefix) => {
   // const regex = /[Ss][Ww][Ee]-[1-9][0-9]*/;
-  const regex = new RegExp("[Ss][Ww][Ee]-[1-9][0-9]*");
+  let regexString = "";
+  for(let i = 0; i < idPrefix.length; i++)
+    regexString += `[${idPrefix[i].toUpperCase()}${idPrefix[i].toLowerCase()}]`
+  regexString += `-[1-9][0-9]*`;
+
+  const regex = new RegExp(regexString);
   const branchName = payload.head.ref;
   const found = branchName.match(regex);
   if(found)
@@ -118,8 +123,8 @@ const main = async () => {
       // console.log(pull_request);
 
       // Issue ID in uppercase
-      const issueID = getIssueID(pull_request);
-
+      const issueID = getIssueID(pull_request, core.getInput('linear_id_prefix'));
+      
       if(issueID){
         const linearClient = getClient(core.getInput('linear_auth_type'), core.getInput('linear_auth_key'));
 
