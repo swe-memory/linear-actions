@@ -21,7 +21,7 @@ jobs:
         
       - name: Title validation
         id: validate
-        uses: swe-memory/linear-actions@v2.1
+        uses: swe-memory/linear-actions@v2.2
         with:
           token: ${{ github.token }}
           linear_id_prefix: "swe"
