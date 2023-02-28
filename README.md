@@ -42,3 +42,8 @@ jobs:
 | label_name          | Label for non-aligned PR title               | "bad PR title"                 | "recheck PR title"                   |
 | label_description   | Label description for non-aligned PR title   | "PR title needs formatting"    | "PR title needs adjustment"          |
 | label_color         | Label color for non-aligned PR title         | "D4C5F9"                       | "0052CC"                             |
+
+## Mechanism
+
+1. Prequisite: the branch name must contain extractable Linear issue ID. E.g.: <code>test/swe-5</code>.
+2. If the branch name does not contain extractable Linear issue ID, the workflow will succeed without validation.
