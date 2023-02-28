@@ -144,6 +144,9 @@ const main = async () => {
         else
           await removeLabel(context, octokit);
       }
+      else{
+        console.log('No extractable issue ID from branch name')
+      }
     }
 
   } catch (error) {
