@@ -103,12 +103,16 @@ const autoComment = async (context, octokit, issueID, targetIssue) => {
 
 // Remove label if good PR title
 const removeLabel = async (context, octokit) => {
-  const { pull_request } = context.payload;
-  await octokit.rest.issues.removeLabel({
-    ...context.repo,
-    issue_number: pull_request.number,
-    name: 'bad PR title'
-  })
+  try{
+    const { pull_request } = context.payload;
+    await octokit.rest.issues.removeLabel({
+      ...context.repo,
+      issue_number: pull_request.number,
+      name: 'bad PR title'
+    })
+  } catch(error){
+    return
+  }
 }
 
 const main = async () => {
@@ -134,15 +138,15 @@ const main = async () => {
         if(!checkTitle(pull_request, targetIssue)){
           
           const labelName = core.getInput('label_name');
-          if(!await checkLabel(context, octokit, labelName)){
+          if(!await checkLabel(context, octokit, labelName))
             await createLabel(context, octokit, labelName, core.getInput('label_description'), core.getInput('label_color'));
-          }
           
           await addLabels(context, octokit, labelName);
           await autoComment(context, octokit, issueID, targetIssue);
+          throw new Error('PR title needs formatting');
         }
         else
-          await removeLabel(context, octokit);
+            await removeLabel(context, octokit);
       }
       else{
         console.log('No extractable issue ID from branch name')
